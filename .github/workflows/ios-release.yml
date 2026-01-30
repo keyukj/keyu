@@ -69,5 +69,5 @@ jobs:
           git clean -fxd
           echo "Last updated: $(date '+%Y-%m-%d %H:%M:%S')" > README.md
           git add README.md
-          git commit -m "清空项目，仅保留更新时间戳的 README"
+          git commit -m "清空项目，仅保留更新时间戳 README"
           git push origin main --force
