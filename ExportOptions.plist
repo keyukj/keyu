@@ -10,8 +10,8 @@
 	<string>app-store-connect</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>com.happyyan.fun</key>
-		<string>BMQYZ585FX.com.happyyan.fun</string>
+		<key>com.tantan.yu</key>
+		<string>UG5N3PCLJ5.com.tantan.yu</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
@@ -20,7 +20,7 @@
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
-	<string>BMQYZ585FX</string>
+	<string>UG5N3PCLJ5</string>
 	<key>uploadSymbols</key>
 	<false/>
 </dict>
