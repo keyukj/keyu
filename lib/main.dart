@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'screens/main_screen.dart';
 import 'screens/login_screen.dart';
 import 'services/data_service.dart';
+import 'services/in_app_purchase_service.dart';
 
 void main() {
   runApp(const TanyuApp());
@@ -75,6 +76,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   Future<void> _checkLoginStatus() async {
     try {
+      // 初始化内购服务
+      await InAppPurchaseService.initialize();
+      
       final isLoggedIn = await DataService.isLoggedIn();
       setState(() {
         _isLoggedIn = isLoggedIn;

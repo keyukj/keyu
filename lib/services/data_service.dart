@@ -13,6 +13,7 @@ class DataService {
   static const String _articlesKey = 'articles';
   static const String _currentUserKey = 'current_user';
   static const String _commentsKey = 'comments';
+  static const String _coinBalanceKey = 'coin_balance';
 
   // 获取所有帖子
   static Future<List<Post>> getPosts() async {
@@ -109,6 +110,34 @@ class DataService {
   static Future<void> saveCurrentUser(User user) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_currentUserKey, json.encode(user.toJson()));
+  }
+
+  // 获取金币余额
+  static Future<int> getCoinBalance() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_coinBalanceKey) ?? 1250; // 默认余额1250
+  }
+
+  // 保存金币余额
+  static Future<void> saveCoinBalance(int balance) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_coinBalanceKey, balance);
+  }
+
+  // 增加金币余额
+  static Future<void> addCoins(int amount) async {
+    final currentBalance = await getCoinBalance();
+    await saveCoinBalance(currentBalance + amount);
+  }
+
+  // 扣除金币余额
+  static Future<bool> deductCoins(int amount) async {
+    final currentBalance = await getCoinBalance();
+    if (currentBalance >= amount) {
+      await saveCoinBalance(currentBalance - amount);
+      return true;
+    }
+    return false;
   }
 
   // 关注页面的帖子数据

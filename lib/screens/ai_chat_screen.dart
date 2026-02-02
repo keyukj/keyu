@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../services/ai_service.dart';
+import '../services/data_service.dart';
+import '../widgets/coin_icon.dart';
 
 class AIChatScreen extends StatefulWidget {
   const AIChatScreen({super.key});
@@ -14,11 +16,20 @@ class _AIChatScreenState extends State<AIChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<ChatMessage> _messages = [];
   bool _isLoading = false;
+  int _coinBalance = 1250; // 金币余额
 
   @override
   void initState() {
     super.initState();
     _addWelcomeMessage();
+    _loadCoinBalance();
+  }
+
+  void _loadCoinBalance() async {
+    final balance = await DataService.getCoinBalance();
+    setState(() {
+      _coinBalance = balance;
+    });
   }
 
   void _addWelcomeMessage() {
@@ -67,10 +78,10 @@ class _AIChatScreenState extends State<AIChatScreen> {
               ),
             ),
             const SizedBox(width: 12),
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'AI旅行助手',
                   style: TextStyle(
                     color: Color(0xFF4A4040),
@@ -78,12 +89,27 @@ class _AIChatScreenState extends State<AIChatScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  '在线',
-                  style: TextStyle(
-                    color: Color(0xFF9C8E8E),
-                    fontSize: 12,
-                  ),
+                Row(
+                  children: [
+                    const CoinIcon(size: 14),
+                    const SizedBox(width: 4),
+                    Text(
+                      '$_coinBalance',
+                      style: const TextStyle(
+                        color: Color(0xFF9C8E8E),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      '每次提问消耗1金币',
+                      style: TextStyle(
+                        color: Color(0xFF9C8E8E),
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -291,7 +317,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 5,
                     offset: const Offset(0, 2),
                   ),
@@ -313,7 +339,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                     _formatTime(message.timestamp),
                     style: TextStyle(
                       color: message.isUser 
-                        ? Colors.white.withOpacity(0.7) 
+                        ? Colors.white.withValues(alpha: 0.7) 
                         : const Color(0xFF9C8E8E),
                       fontSize: 10,
                     ),
@@ -344,6 +370,31 @@ class _AIChatScreenState extends State<AIChatScreen> {
   }
 
   void _sendQuickMessage(String message) {
+    if (_coinBalance < 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              CoinIcon(size: 16),
+              SizedBox(width: 8),
+              Text('金币不足，请先充值'),
+            ],
+          ),
+          backgroundColor: const Color(0xFFF72E1E),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          action: SnackBarAction(
+            label: '去充值',
+            textColor: Colors.white,
+            onPressed: () {
+              Navigator.pushNamed(context, '/wallet_recharge');
+            },
+          ),
+        ),
+      );
+      return;
+    }
+    
     _messageController.text = message;
     _sendMessage();
   }
@@ -351,6 +402,32 @@ class _AIChatScreenState extends State<AIChatScreen> {
   void _sendMessage() async {
     final message = _messageController.text.trim();
     if (message.isEmpty || _isLoading) return;
+
+    // 检查金币余额
+    if (_coinBalance < 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              CoinIcon(size: 16),
+              SizedBox(width: 8),
+              Text('金币不足，请先充值'),
+            ],
+          ),
+          backgroundColor: const Color(0xFFF72E1E),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          action: SnackBarAction(
+            label: '去充值',
+            textColor: Colors.white,
+            onPressed: () {
+              Navigator.pushNamed(context, '/wallet_recharge');
+            },
+          ),
+        ),
+      );
+      return;
+    }
 
     setState(() {
       _messages.add(ChatMessage(
@@ -365,6 +442,15 @@ class _AIChatScreenState extends State<AIChatScreen> {
     _scrollToBottom();
 
     try {
+      // 扣除1金币
+      final success = await DataService.deductCoins(1);
+      if (success) {
+        // 更新本地余额显示
+        setState(() {
+          _coinBalance -= 1;
+        });
+      }
+
       // 构建对话历史
       List<Map<String, String>> conversationHistory = [];
       for (int i = math.max(0, _messages.length - 10); i < _messages.length - 1; i++) {
@@ -392,6 +478,12 @@ class _AIChatScreenState extends State<AIChatScreen> {
           timestamp: DateTime.now(),
         ));
         _isLoading = false;
+      });
+      
+      // 如果AI服务失败，退还金币
+      await DataService.addCoins(1);
+      setState(() {
+        _coinBalance += 1;
       });
     }
 

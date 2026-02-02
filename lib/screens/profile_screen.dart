@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/user.dart';
 import '../models/post.dart';
 import '../services/data_service.dart';
 import 'edit_profile_screen.dart';
 import 'post_detail_screen.dart';
 import 'webview_screen.dart';
+import 'wallet_recharge_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -114,17 +116,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 
-                // Settings icon
+                // Top icons
                 Positioned(
                   top: 56,
                   right: 24,
-                  child: GestureDetector(
-                    onTap: _showSettings,
-                    child: const Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                      size: 24,
-                    ),
+                  child: Row(
+                    children: [
+                      // Settings icon
+                      GestureDetector(
+                        onTap: _showSettings,
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              width: 1,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.settings,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -192,27 +211,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: _editProfile,
+                          onTap: _openWallet,
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF4A4040),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFF72E1E), Color(0xFFFF7E7E)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: const Color(0xFFF72E1E).withValues(alpha: 0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
                               ],
                             ),
-                            child: const Text(
-                              '编辑资料',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.account_balance_wallet,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  '钱包',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -596,6 +630,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
     });
+  }
+
+  void _openWallet() {
+    HapticFeedback.lightImpact();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const WalletRechargeScreen(),
+      ),
+    );
   }
 
   void _showPostDetail(Post post) {
