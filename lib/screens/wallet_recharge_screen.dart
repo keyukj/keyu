@@ -227,171 +227,199 @@ class _WalletRechargeScreenState extends State<WalletRechargeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF4A4040)),
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF4A4040), size: 18),
+          ),
         ),
         title: const Text(
           '钱包充值',
           style: TextStyle(
             color: Color(0xFF4A4040),
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // 金币余额卡片
-            Container(
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFF72E1E), Color(0xFFFF7E7E)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFF72E1E).withValues(alpha: 0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                
+                // 金币余额卡片 - 居中优化
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.all(28),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFF72E1E), Color(0xFFFF6B6B)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(28),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFF72E1E).withValues(alpha: 0.4),
+                        blurRadius: 24,
+                        offset: const Offset(0, 12),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  AnimatedBuilder(
-                    animation: _pulseAnimation,
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: _pulseAnimation.value,
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Center(
-                            child: CoinIcon(size: 32),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '当前余额',
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const CoinIcon(size: 20),
-                            const SizedBox(width: 4),
-                            Text(
-                              currentCoins.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
+                  child: Column(
+                    children: [
+                      // 金币图标动画
+                      AnimatedBuilder(
+                        animation: _pulseAnimation,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: _pulseAnimation.value,
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.25),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: CoinIcon(size: 44),
                               ),
                             ),
-                          ],
+                          );
+                        },
+                      ),
+                      
+                      const SizedBox(height: 20),
+                      
+                      // 余额标签
+                      Text(
+                        '当前余额',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.95),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.5,
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // 充值选项标题
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '充值金额',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF4A4040),
+                      ),
+                      
+                      const SizedBox(height: 8),
+                      
+                      // 余额数字
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const CoinIcon(size: 24),
+                          const SizedBox(width: 8),
+                          Text(
+                            currentCoins.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 42,
+                              fontWeight: FontWeight.bold,
+                              height: 1.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // 充值选项网格
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.85,
+                
+                const SizedBox(height: 32),
+                
+                // 充值选项标题
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: [
+                      Text(
+                        '选择充值金额',
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2D2D2D),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Icon(Icons.diamond, color: Color(0xFFF72E1E), size: 20),
+                    ],
                   ),
-                  itemCount: rechargeItems.length,
-                  itemBuilder: (context, index) {
-                    final item = rechargeItems[index];
-                    final isSelected = selectedIndex == index;
-                    
-                    return AnimatedBuilder(
-                      animation: _scaleAnimation,
-                      builder: (context, child) {
-                        return Transform.scale(
-                          scale: isSelected ? _scaleAnimation.value : 1.0,
-                          child: GestureDetector(
-                            onTap: () => _onItemTap(index),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.easeInOut,
-                              decoration: BoxDecoration(
-                                color: isSelected 
-                                    ? const Color(0xFFF72E1E).withValues(alpha: 0.1)
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: isSelected 
-                                      ? const Color(0xFFF72E1E)
-                                      : const Color(0xFFE5E5E5),
-                                  width: isSelected ? 2 : 1,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: isSelected 
-                                        ? const Color(0xFFF72E1E).withValues(alpha: 0.2)
-                                        : Colors.black.withValues(alpha: 0.05),
-                                    blurRadius: isSelected ? 15 : 8,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Stack(
-                                children: [
-                                  // 主要内容
-                                  Padding(
-                                    padding: const EdgeInsets.all(16),
+                ),
+                
+                const SizedBox(height: 20),
+                
+                // 充值选项网格 - 居中优化
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Center(
+                      child: Wrap(
+                        spacing: 14,
+                        runSpacing: 14,
+                        alignment: WrapAlignment.center,
+                        children: List.generate(rechargeItems.length, (index) {
+                          final item = rechargeItems[index];
+                          final isSelected = selectedIndex == index;
+                          
+                          return AnimatedBuilder(
+                            animation: _scaleAnimation,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: isSelected ? _scaleAnimation.value : 1.0,
+                                child: GestureDetector(
+                                  onTap: () => _onItemTap(index),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeOutCubic,
+                                    width: 105,
+                                    height: 130,
+                                    decoration: BoxDecoration(
+                                      gradient: isSelected 
+                                          ? const LinearGradient(
+                                              colors: [Color(0xFFFFF5F5), Color(0xFFFFE5E5)],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                            )
+                                          : null,
+                                      color: isSelected ? null : Colors.white,
+                                      borderRadius: BorderRadius.circular(22),
+                                      border: Border.all(
+                                        color: isSelected 
+                                            ? const Color(0xFFF72E1E)
+                                            : const Color(0xFFE8E8E8),
+                                        width: isSelected ? 2.5 : 1.5,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: isSelected 
+                                              ? const Color(0xFFF72E1E).withValues(alpha: 0.25)
+                                              : Colors.black.withValues(alpha: 0.06),
+                                          blurRadius: isSelected ? 18 : 10,
+                                          offset: Offset(0, isSelected ? 6 : 3),
+                                        ),
+                                      ],
+                                    ),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
@@ -401,16 +429,16 @@ class _WalletRechargeScreenState extends State<WalletRechargeScreen>
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             CoinIcon(
-                                              size: 18,
+                                              size: 20,
                                               isSelected: isSelected,
                                             ),
-                                            const SizedBox(width: 2),
+                                            const SizedBox(width: 4),
                                             Flexible(
                                               child: Text(
                                                 item.displayCoins,
                                                 style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700,
                                                   color: isSelected 
                                                       ? const Color(0xFFF72E1E)
                                                       : const Color(0xFF4A4040),
@@ -421,95 +449,126 @@ class _WalletRechargeScreenState extends State<WalletRechargeScreen>
                                           ],
                                         ),
                                         
-                                        const SizedBox(height: 8),
+                                        const SizedBox(height: 12),
                                         
                                         // 价格
                                         Text(
                                           item.displayPrice,
                                           style: TextStyle(
-                                            fontSize: 18,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                             color: isSelected 
                                                 ? const Color(0xFFF72E1E)
-                                                : const Color(0xFF4A4040),
+                                                : const Color(0xFF2D2D2D),
                                           ),
                                         ),
                                         
-                                        const SizedBox(height: 4),
+                                        const SizedBox(height: 6),
                                         
-                                        // 性价比显示
-                                        Text(
-                                          '${(item.coins / item.price).toStringAsFixed(0)}币/元',
-                                          style: TextStyle(
-                                            fontSize: 10,
+                                        // 性价比标签
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                          decoration: BoxDecoration(
                                             color: isSelected 
-                                                ? const Color(0xFFF72E1E).withValues(alpha: 0.7)
-                                                : const Color(0xFF9C8E8E),
+                                                ? const Color(0xFFF72E1E).withValues(alpha: 0.15)
+                                                : const Color(0xFFF5F5F5),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: Text(
+                                            '${(item.coins / item.price).toStringAsFixed(0)}币/元',
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w600,
+                                              color: isSelected 
+                                                  ? const Color(0xFFF72E1E)
+                                                  : const Color(0xFF999999),
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ),
-            // 充值按钮
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: selectedIndex != null ? _onRecharge : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedIndex != null 
-                        ? const Color(0xFFF72E1E)
-                        : const Color(0xFFE5E5E5),
-                    foregroundColor: Colors.white,
-                    elevation: selectedIndex != null ? 8 : 0,
-                    shadowColor: const Color(0xFFF72E1E).withValues(alpha: 0.3),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
+                                ),
+                              );
+                            },
+                          );
+                        }),
+                      ),
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (selectedIndex != null) ...[
-                        const Icon(Icons.payment, size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          '立即充值 ${rechargeItems[selectedIndex!].displayPrice}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ] else ...[
-                        Text(
-                          '请选择充值金额',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
+                ),
+                
+                // 充值按钮 - 优化样式
+                Container(
+                  padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 20,
+                        offset: const Offset(0, -5),
+                      ),
                     ],
                   ),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    width: double.infinity,
+                    height: 58,
+                    child: ElevatedButton(
+                      onPressed: selectedIndex != null ? _onRecharge : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: selectedIndex != null 
+                            ? const Color(0xFFF72E1E)
+                            : const Color(0xFFE8E8E8),
+                        foregroundColor: Colors.white,
+                        elevation: selectedIndex != null ? 10 : 0,
+                        shadowColor: const Color(0xFFF72E1E).withValues(alpha: 0.4),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(29),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (selectedIndex != null) ...[
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.payment, size: 18),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              '立即充值 ${rechargeItems[selectedIndex!].displayPrice}',
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ] else ...[
+                            Icon(Icons.touch_app, size: 20, color: Colors.grey[500]),
+                            const SizedBox(width: 8),
+                            Text(
+                              '请选择充值金额',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

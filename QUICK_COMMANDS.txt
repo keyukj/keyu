@@ -1,0 +1,80 @@
+╔════════════════════════════════════════════════════════════╗
+║          TanyuApp Framework 快速命令参考                   ║
+╚════════════════════════════════════════════════════════════╝
+
+【一键打包】
+./package_for_appstore.sh
+
+【分步执行】
+./build_framework.sh          # 构建 Framework
+./verify_framework.sh         # 验证 Framework
+./configure_signing.sh        # 配置签名
+
+【查看文档】
+cat APP_STORE_SUBMISSION_GUIDE.md    # App Store 提交指南
+cat CHECKLIST.md                      # 检查清单
+cat README.md                         # 项目说明
+cat SUMMARY.md                        # 工作总结
+
+【Flutter 命令】
+flutter pub get               # 获取依赖
+flutter clean                 # 清理构建
+flutter run                   # 运行应用
+flutter build ios             # 构建 iOS
+
+【CocoaPods 命令】
+cd ios && pod install         # 安装依赖
+cd ios && pod update          # 更新依赖
+
+【验证签名】
+codesign --verify --deep --strict ./build/frameworks/Release/App.xcframework
+
+【重新签名】
+codesign --force --sign "Apple Distribution" --timestamp ./build/frameworks/Release/App.xcframework
+
+【关键配置】
+Team ID:     UG5N3PCLJ5
+Bundle ID:   com.tantan.yu
+Min iOS:     13.0
+
+【输出目录】
+./build/frameworks/Release/
+
+【必需 Frameworks】
+✓ App.xcframework
+✓ Flutter.xcframework
+✓ FlutterPluginRegistrant.xcframework
+✓ in_app_purchase_storekit.xcframework
+✓ shared_preferences_foundation.xcframework
+✓ url_launcher_ios.xcframework
+✓ webview_flutter_wkwebview.xcframework
+
+【Xcode 配置】
+Framework Search Paths:  $(inherited) $(PROJECT_DIR)/Frameworks
+Other Linker Flags:      -ObjC
+Enable Bitcode:          NO
+iOS Deployment Target:   13.0
+User Script Sandboxing:  NO
+
+【提交流程】
+1. ./package_for_appstore.sh
+2. 集成 frameworks 到 OC 项目
+3. 配置 Build Settings 和签名
+4. 真机测试
+5. Product → Archive
+6. Distribute App → App Store Connect
+7. 提交审核
+
+【常用路径】
+项目根目录:     .
+iOS 项目:       ./ios
+构建输出:       ./build/frameworks/Release
+隐私清单:       ./ios/Runner/PrivacyInfo.xcprivacy
+Info.plist:     ./ios/Runner/Info.plist
+示例代码:       ./example_integration
+
+【技术支持】
+查看文档或联系开发团队
+
+版本: 1.0.5
+日期: 2026-02-21

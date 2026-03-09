@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/main_screen.dart';
 import 'screens/login_screen.dart';
+import 'screens/splash_screen.dart';
 import 'services/data_service.dart';
 import 'services/in_app_purchase_service.dart';
 
@@ -49,6 +51,7 @@ class TanyuApp extends StatelessWidget {
         ),
       ),
       routes: {
+        '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/main': (context) => const MainScreen(),
       },
@@ -67,6 +70,7 @@ class AuthWrapper extends StatefulWidget {
 class _AuthWrapperState extends State<AuthWrapper> {
   bool _isLoading = true;
   bool _isLoggedIn = false;
+  bool _hasAgreedToTerms = false;
 
   @override
   void initState() {
@@ -79,13 +83,24 @@ class _AuthWrapperState extends State<AuthWrapper> {
       // 初始化内购服务
       await InAppPurchaseService.initialize();
       
+      // 检查是否已同意协议
+      final prefs = await SharedPreferences.getInstance();
+      
+      // 临时注释：强制显示启动页用于测试
+      // final agreedToTerms = prefs.getBool('agreed_to_terms') ?? false;
+      final agreedToTerms = false; // 强制显示启动页
+      
+      // 检查登录状态
       final isLoggedIn = await DataService.isLoggedIn();
+      
       setState(() {
+        _hasAgreedToTerms = agreedToTerms;
         _isLoggedIn = isLoggedIn;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
+        _hasAgreedToTerms = false;
         _isLoggedIn = false;
         _isLoading = false;
       });
@@ -105,6 +120,13 @@ class _AuthWrapperState extends State<AuthWrapper> {
       );
     }
 
+    // 如果未同意协议，显示启动页
+    if (!_hasAgreedToTerms) {
+      return const SplashScreen();
+    }
+
+    // 如果已同意协议但未登录，显示登录页
+    // 如果已登录，显示主页
     return _isLoggedIn ? const MainScreen() : const LoginScreen();
   }
 }
