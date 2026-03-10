@@ -99,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen> {
               
               // 标题
               const Text(
-                '探遇',
+                '彼趣',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,

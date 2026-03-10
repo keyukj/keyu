@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 24),
             const Text(
-              '探遇',
+              '彼趣',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

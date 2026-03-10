@@ -47,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildNavItem(0, Icons.explore, '探遇'),
+                _buildNavItem(0, Icons.explore, '彼趣'),
                 _buildNavItem(1, Icons.grid_view, '广场'),
                 _buildCenterButton(),
                 _buildNavItem(3, Icons.movie, '视界'),

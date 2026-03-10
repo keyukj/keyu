@@ -35,7 +35,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
   void _addWelcomeMessage() {
     setState(() {
       _messages.add(ChatMessage(
-        text: '你好！我是探遇AI助手 🤖\n\n我可以帮你：\n• 规划旅行路线\n• 推荐热门景点\n• 介绍当地美食\n• 解答旅行问题\n\n有什么想了解的吗？',
+        text: '你好！我是彼趣AI助手 🤖\n\n我可以帮你：\n• 规划旅行路线\n• 推荐热门景点\n• 介绍当地美食\n• 解答旅行问题\n\n有什么想了解的吗？',
         isUser: false,
         timestamp: DateTime.now(),
       ));

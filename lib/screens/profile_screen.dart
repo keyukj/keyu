@@ -853,7 +853,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 16),
               const Text(
-                '探遇',
+                '彼趣',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

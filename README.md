@@ -1,4 +1,4 @@
-# TanyuApp - 探遇漂流瓶
+# TanyuApp - 彼趣
 
 一个基于 Flutter 的社交应用，支持打包为 iOS Framework 集成到原生 OC 项目中。
 

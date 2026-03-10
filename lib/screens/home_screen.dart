@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: const TextSpan(
                           children: [
                             TextSpan(
-                              text: '探遇 ',
+                              text: '彼趣 ',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
