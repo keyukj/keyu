@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'package:flutter/services.dart';
+import 'biqu_home_screen.dart';
 import 'square_screen.dart';
-import 'vision_screen.dart';
 import 'profile_screen.dart';
 import 'ai_chat_screen.dart';
 
@@ -16,18 +16,22 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
   
   final List<Widget> _screens = [
-    const HomeScreen(),
+    const BiquHomeScreen(),
     const SquareScreen(),
-    const SizedBox(), // Placeholder for center button
-    const VisionScreen(),
+    const AIChatScreen(),
     const ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex == 2 ? 0 : _currentIndex, // Skip center button
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        body: IndexedStack(
+        index: _currentIndex,
         children: _screens,
       ),
       bottomNavigationBar: Container(
@@ -49,14 +53,14 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 _buildNavItem(0, Icons.explore, '彼趣'),
                 _buildNavItem(1, Icons.grid_view, '广场'),
-                _buildCenterButton(),
-                _buildNavItem(3, Icons.movie, '视界'),
-                _buildNavItem(4, Icons.person, '我的'),
+                _buildNavItem(2, Icons.smart_toy_outlined, 'AI助手'),
+                _buildNavItem(3, Icons.person, '我的'),
               ],
             ),
           ),
         ),
       ),
+    ),
     );
   }
 
@@ -93,45 +97,4 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildCenterButton() {
-    return GestureDetector(
-      onTap: () {
-        // 打开AI助手聊天页面
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AIChatScreen(),
-          ),
-        );
-      },
-      child: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFFF72E1E), Color(0xFFFF7E7E)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(28),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(247, 46, 30, 0.4),
-              blurRadius: 20,
-              offset: Offset(0, 10),
-            ),
-          ],
-          border: Border.all(
-            color: const Color(0xFFFFF0F0),
-            width: 4,
-          ),
-        ),
-        child: const Icon(
-          Icons.smart_toy,
-          color: Colors.white,
-          size: 24,
-        ),
-      ),
-    );
-  }
 }

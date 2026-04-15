@@ -56,10 +56,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Color(0xFF4A4040)),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: Row(
           children: [
             Container(

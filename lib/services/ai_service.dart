@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class AIService {
-  static const String _apiKey = 'sk-7aa7948c287843f2937d1071cc551b90';
+  static const String _apiKey = 'sk-04fe19d0f3a94a60b0ceae2da2d949aa';
   static const String _baseUrl = 'https://api.deepseek.com/chat/completions';
 
   static Future<String> sendMessage(String message, {List<Map<String, String>>? conversationHistory}) async {
